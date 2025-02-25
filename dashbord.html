@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タスク管理ダッシュボード</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- サイドバー（固定） -->
+        <aside class="fixed w-64 bg-blue-900 text-white shadow-md h-screen">
+            <div class="p-4">
+                <h2 class="text-xl font-bold">プロダクトロゴ</h2>
+                <nav class="mt-6">
+                    <ul>
+                        <li class="mb-2"><a href="#dashboard" class="block py-2 px-4 bg-blue-800 rounded">ダッシュボード</a></li>
+                        <li class="mb-2"><a href="#tasks" class="block py-2 px-4 hover:bg-blue-800 rounded">タスク管理</a></li>
+                        <li class="mb-2"><a href="#schedule" class="block py-2 px-4 hover:bg-blue-800 rounded">スケジュール管理</a></li>
+                        <li class="mb-2"><a href="#feedback" class="block py-2 px-4 hover:bg-blue-800 rounded">フィードバック</a></li>
+                        <li class="mb-2"><a href="#settings" class="block py-2 px-4 hover:bg-blue-800 rounded">設定</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- メインコンテンツ（サイドバーの幅分だけ左マージンを設定） -->
+        <main class="ml-64 flex-1 p-6 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold">タスク管理ダッシュボード</h1>
+                <div class="flex items-center">
+                    <span class="mr-2">ログイン中: 管理者A</span>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="document.getElementById('taskModal').classList.remove('hidden')">新規タスク</button>
+                </div>
+            </div>
+
+            <!-- 通知バナー -->
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-6 rounded">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-700">
+                            現在アンケート実施中です！期限は 2025/03/01 です。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 全体進捗状況 -->
+            <section class="mb-6 bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-semibold mb-4">タスク全体の進捗状況</h2>
+                <div class="mb-2 flex justify-between">
+                    <span>全体進捗率: 65%</span>
+                    <span>残り期間: 14日</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="bg-blue-600 h-4 rounded-full" style="width: 65%"></div>
+                </div>
+            </section>
+
+            <!-- 施策ごとの実行率 -->
+            <section class="mb-6 bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-semibold mb-4">施策ごとの実行率</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 施策1 -->
+                    <div class="bg-gray-50 p-4 rounded">
+                        <h3 class="font-medium mb-2">キャリア面談の実施</h3>
+                        <div class="flex justify-between mb-1">
+                            <span>実行率: 80%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-500 h-2.5 rounded-full" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 施策2 -->
+                    <div class="bg-gray-50 p-4 rounded">
+                        <h3 class="font-medium mb-2">フィードバック会の実施</h3>
+                        <div class="flex justify-between mb-1">
+                            <span>実行率: 50%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 施策3 -->
+                    <div class="bg-gray-50 p-4 rounded">
+                        <h3 class="font-medium mb-2">評価制度の見直し</h3>
+                        <div class="flex justify-between mb-1">
+                            <span>実行率: 30%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-red-500 h-2.5 rounded-full" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- タスク一覧 -->
+            <section class="bg-white p-4 rounded shadow mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold">タスク一覧</h2>
+                    <div>
+                        <button class="bg-blue-500 text-white px-3 py-1 rounded text-sm">タスク分解AI</button>
+                        <button class="bg-green-500 text-white px-3 py-1 rounded text-sm ml-2">スケジュール作成</button>
+                    </div>
+                </div>
+                
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">タスク名</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">担当者</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">期限</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ステータス</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">アクション</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">キャリア面談スケジュール作成</td>
+                            <td class="px-6 py-4 whitespace-nowrap">山田太郎</td>
+                            <td class="px-6 py-4 whitespace-nowrap">2025/02/15</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">完了</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <button class="text-blue-600 hover:text-blue-900" onclick="document.getElementById('taskDetailModal').classList.remove('hidden')">詳細</button>
+                                <button class="text-green-600 hover:text-green-900 ml-2" onclick="document.getElementById('taskNoteModal').classList.remove('hidden')">メモ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">フィードバック会議資料作成</td>
+                            <td class="px-6 py-4 whitespace-nowrap">佐藤花子</td>
+                            <td class="px-6 py-4 whitespace-nowrap">2025/02/20</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">進行中</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <button class="text-blue-600 hover:text-blue-900">詳細</button>
+                                <button class="text-green-600 hover:text-green-900 ml-2">メモ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">評価制度改定案作成</td>
+                            <td class="px-6 py-4 whitespace-nowrap">鈴木一郎</td>
+                            <td class="px-6 py-4 whitespace-nowrap">2025/02/28</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">未着手</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <button class="text-blue-600 hover:text-blue-900">詳細</button>
+                                <button class="text-green-600 hover:text-green-900 ml-2">メモ</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 振り返りとメモ一覧 -->
+            <section class="bg-white p-4 rounded shadow">
+                <h2 class="text-xl font-semibold mb-4">タスク振り返りとメモ</h2>
+                <div class="space-y-4">
+                    <div class="border p-4 rounded">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-medium">キャリア面談スケジュール作成</h3>
+                            <span class="text-sm text-gray-500">2025/02/10</span>
+                        </div>
+                        <p class="text-gray-700 mb-2">全部門のスケジュールを調整し、面談日程を確定しました。</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span class="mr-2">記入者: 山田太郎</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full">完了</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border p-4 rounded">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-medium">フィードバック会議資料作成</h3>
+                            <span class="text-sm text-gray-500">2025/02/18</span>
+                        </div>
+                        <p class="text-gray-700 mb-2">アンケート結果を集計中。グラフ作成に時間がかかっています。</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span class="mr-2">記入者: 佐藤花子</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">進行中</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 新規タスク作成モーダル -->
+    <div id="taskModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">新規タスク作成</h2>
+                <button onclick="document.getElementById('taskModal').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="taskName">タスク名</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="taskName" type="text" placeholder="タスク名を入力">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="taskDescription">タスク詳細</label>
+                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="taskDescription" placeholder="タスクの詳細を入力" rows="3"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="taskAssignee">担当者</label>
+                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="taskAssignee">
+                        <option>山田太郎</option>
+                        <option>佐藤花子</option>
+                        <option>鈴木一郎</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="taskDeadline">期限</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="taskDeadline" type="date">
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        タスクを作成
+                    </button>
+                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="document.getElementById('taskModal').classList.add('hidden')">
+                        キャンセル
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- タスク詳細モーダル -->
+    <div id="taskDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">タスク詳細</h2>
+                <button onclick="document.getElementById('taskDetailModal').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-lg font-medium">キャリア面談スケジュール作成</h3>
+                <p class="text-gray-600 mt-1">全部門の管理職と従業員のスケジュールを調整し、面談日程を確定する。</p>
+            </div>
+            <div class="mb-4">
+                <p class="text-sm text-gray-500">担当者: 山田太郎</p>
+                <p class="text-sm text-gray-500">期限: 2025/02/15</p>
+                <p class="text-sm text-gray-500">ステータス: <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">完了</span></p>
+            </div>
+            <div class="mb-4">
+                <h4 class="font-medium mb-2">進捗履歴</h4>
+                <ul class="space-y-2">
+                    <li class="text-sm">
+                        <span class="text-gray-500">2025/02/01</span> - タスク作成
+                    </li>
+                    <li class="text-sm">
+                        <span class="text-gray-500">2025/02/05</span> - スケジュール調整開始
+                    </li>
+                    <li class="text-sm">
+                        <span class="text-gray-500">2025/02/10</span> - スケジュール確定、タスク完了
+                    </li>
+                </ul>
+            </div>
+            <div class="flex justify-end">
+                <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="document.getElementById('taskDetailModal').classList.add('hidden')">
+                    閉じる
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- タスクメモ・振り返りモーダル -->
+    <div id="taskNoteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">タスクメモ・振り返り</h2>
+                <button onclick="document.getElementById('taskNoteModal').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-lg font-medium">キャリア面談スケジュール作成</h3>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="taskNote">メモ・振り返り</label>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="taskNote" placeholder="タスクに関するメモや振り返りを入力" rows="5">全部門のスケジュールを調整し、面談日程を確定しました。次回は余裕を持ってスケジュール調整を開始したい。</textarea>
+            </div>
+            <div class="mb-4">
+                <h4 class="font-medium mb-2">過去のメモ</h4>
+                <div class="space-y-2">
+                    <div class="p-2 bg-gray-100 rounded">
+                        <p class="text-sm">スケジュール調整が難航しています。特に営業部門との調整が課題。</p>
+                        <p class="text-xs text-gray-500 mt-1">2025/02/05 - 山田太郎</p>
+                    </div>
+                    <div class="p-2 bg-gray-100 rounded">
+                        <p class="text-sm">営業部門との調整完了。残りの部門も調整中。</p>
+                        <p class="text-xs text-gray-500 mt-1">2025/02/08 - 山田太郎</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    保存
+                </button>
+                <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="document.getElementById('taskNoteModal').classList.add('hidden')">
+                    キャンセル
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
